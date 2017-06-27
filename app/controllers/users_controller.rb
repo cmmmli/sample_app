@@ -1,8 +1,9 @@
 class UsersController < ApplicationController
   before_action :logged_in_user, only: [:index, :edit, :update, :destroy,
-                                        :following, :followers]
-  before_action :correct_user, only: [:edit, :update]
+                                        :following, :followers, :notifications]
+  before_action :correct_user, only: [:edit, :update, :notifications]
   before_action :admin_user, only: :destroy
+  after_action :notification_was_open, only: :notifications
 
 
   def index
@@ -62,6 +63,12 @@ class UsersController < ApplicationController
     render 'show_follow'
   end
 
+  def notifications
+      @title = "Notifications"
+      @users = @user.following
+      @notifications = current_user.notifications.paginate(page: params[:page])
+  end
+
 
   private
 
@@ -78,5 +85,15 @@ class UsersController < ApplicationController
 
     def admin_user
       redirect_to(root_url) unless current_user.admin?
+    end
+
+    # after_action
+
+    def notification_was_open
+      @notifications = current_user.notifications.select{|n| n.opened == false}
+      @notifications.each do |n|
+        n.opened = true
+        n.save
+      end
     end
 end

@@ -6,6 +6,9 @@ class User < ApplicationRecord
                   foreign_key: "followed_id", dependent: :destroy
   has_many :following, through: :active_relationships, source: :followed
   has_many :followers, through: :passive_relationships, source: :follower
+  has_many :notifications, class_name: "Notification", foreign_key: "notifier_id"
+  has_many :group_users
+  has_many :groups, through: :group_users
 
   attr_accessor :remember_token, :activation_token, :reset_token
   before_save :downcase_email
@@ -81,7 +84,13 @@ class User < ApplicationRecord
   end
 
   def follow(other_user)
-    active_relationships.create(followed_id: other_user.id)
+    follow = active_relationships.create(followed_id: other_user.id)
+    # ßself.notifications.create(follow)
+    Notification.create do |n|
+      n.notifier_id = other_user.id
+      n.notificationable = follow
+      n.body = "create"
+    end
   end
 
   def unfollow(other_user)

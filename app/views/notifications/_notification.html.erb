@@ -1,0 +1,16 @@
+<% if notification.opened == false %>
+  <% read_status = "unread" %>
+<% else %>
+  <% read_status = "already-read" %>
+<% end %>
+<li id="notification-<%= notification.id %>" class=<%= read_status %> >
+  <% other_user =  Relationship.find(notification[:notificationable_id]).follower %>
+  <%= link_to gravatar_for(other_user, size: 50), other_user %>
+  <span class="user">
+    Followed by <%= link_to other_user.name, other_user %>
+    
+  </span>
+  <span class="body">
+    <%= time_ago_in_words(notification.created_at) %> ago.
+  </span>
+</li>

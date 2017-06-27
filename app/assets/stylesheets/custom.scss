@@ -77,6 +77,9 @@ p {
   }
 }
 
+
+
+
 /* footer */
 
 footer {
@@ -286,5 +289,42 @@ span.picture {
   margin-top: 10px;
   input {
     border: 0;
+  }
+}
+
+/* notification */
+
+.notifications {
+  list-style: none;
+  padding: 0;
+  li {
+    padding: 10px 0;
+    border-top: 1px solid #e8e8e8;
+    min-height: 80px
+  }
+  .user {
+    margin-top: 5em;
+    padding-top: 0;
+  }
+  .body {
+    display: block;
+    margin-left: 60px;
+    img {
+      display: block;
+      padding: 5px 0;
+    }
+  }
+  .gravatar {
+    float: left;
+    margin-right: 10px;
+    margin-top: 5px;
+  }
+}
+
+
+.mini-followform {
+  float: right;
+  input {
+    min-width: 90px;
   }
 }
