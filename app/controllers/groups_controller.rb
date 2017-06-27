@@ -1,10 +1,11 @@
 class GroupsController < ApplicationController
   def index
-    @groups = Group.all
+    @groups = Group.all.paginate(page: params[:page])
   end
 
   def show
-
+    @group = Group.find(params[:id])
+    @users = @group.users.paginate(page: params[:page])
   end
 
   def new
