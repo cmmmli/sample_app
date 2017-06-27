@@ -101,6 +101,19 @@ class User < ApplicationRecord
     following.include?(other_user)
   end
 
+  # adminユーザとしてグループに参加
+  def join_group_by_admin(group_id)
+    self.join_group(group_id, 1)
+  end
+
+  # グループ参加
+  def join_group(group_id, role)
+    group_users.create{ |n|
+    n.user_id = self.id
+    n.group_id = group_id
+    n.role = role }
+  end
+
 
   private
   # メールアドレスをすべて小文字にする

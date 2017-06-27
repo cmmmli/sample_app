@@ -15,6 +15,7 @@ class GroupsController < ApplicationController
   def create
     @group = Group.new(group_params)
     if @group.save
+      current_user.join_group_by_admin(@group.id)
       render 'show'
     else
       render 'new'
