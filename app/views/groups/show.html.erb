@@ -4,6 +4,9 @@
     <section class="group_info">
       <h1>
         <%= @group.name %>
+        <% if current_user.owner?(@group.id) || current_user.admin? %>
+         | <%= link_to "delete", @group, method: :delete, date: {confirm: "You sure?"} %>
+        <% end %>
       </h1>
     </section>
   </aside>

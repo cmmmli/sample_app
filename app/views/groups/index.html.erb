@@ -1,5 +1,8 @@
 <% provide(:title, 'All groups') %>
 <h1>All groups</h1>
+<h4>
+<%= link_to "Make group", new_group_path %>
+</h4>
 
 <%= will_paginate @groups %>
 

@@ -7,7 +7,7 @@ class User < ApplicationRecord
   has_many :following, through: :active_relationships, source: :followed
   has_many :followers, through: :passive_relationships, source: :follower
   has_many :notifications, class_name: "Notification", foreign_key: "notifier_id"
-  has_many :group_users
+  has_many :group_users, dependent: :destroy
   has_many :groups, through: :group_users
 
   attr_accessor :remember_token, :activation_token, :reset_token
@@ -101,7 +101,7 @@ class User < ApplicationRecord
     following.include?(other_user)
   end
 
-  # adminユーザとしてグループに参加
+  # ownerユーザとしてグループに参加
   def join_group_by_admin(group_id)
     self.join_group(group_id, 1)
   end
@@ -121,6 +121,17 @@ class User < ApplicationRecord
 
   def joining?(group)
     groups.include?(group)
+  end
+
+  # グループ脱退
+  def defect(group_id)
+    group_users.find_by(group_id: group_id).destroy
+  end
+
+  def owner?(group_id)
+    if group_user = group_users.find_by(group_id: group_id)
+      group_user.role == 1
+    end
   end
 
 

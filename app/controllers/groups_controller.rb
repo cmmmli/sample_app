@@ -17,14 +17,16 @@ class GroupsController < ApplicationController
     @group = Group.new(group_params)
     if @group.save
       current_user.join_group_by_admin(@group.id)
-      render 'show'
+      redirect_to group_url(@group)
     else
       render 'new'
     end
   end
 
   def destroy
-
+    Group.find(params[:id]).destroy
+    flash[:success] = "Group deleted"
+    redirect_to groups_url
   end
 
   private
