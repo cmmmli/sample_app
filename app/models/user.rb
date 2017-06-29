@@ -9,6 +9,7 @@ class User < ApplicationRecord
   has_many :notifications, class_name: "Notification", foreign_key: "notifier_id"
   has_many :group_users, dependent: :destroy
   has_many :groups, through: :group_users
+  has_many :comments, dependent: :destroy
 
   attr_accessor :remember_token, :activation_token, :reset_token
   before_save :downcase_email

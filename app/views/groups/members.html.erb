@@ -1,0 +1,5 @@
+<h3>Members (<%= @users.count %>)</h3>
+<ol class="users">
+  <%= render @users %>
+</ol>
+<%= will_paginate @users %>

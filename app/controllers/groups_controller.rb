@@ -5,7 +5,8 @@ class GroupsController < ApplicationController
 
   def show
     @group = Group.find(params[:id])
-    @users = @group.users.paginate(page: params[:page])
+    @comment = @group.comments.build
+    @comments = @group.comments.paginate(page: params[:page])
   end
 
   def new
@@ -27,6 +28,12 @@ class GroupsController < ApplicationController
     Group.find(params[:id]).destroy
     flash[:success] = "Group deleted"
     redirect_to groups_url
+  end
+
+  def members
+    @title = "Group members"
+    @group = Group.find(params[:id])
+    @users = @group.users.paginate(page: params[:page])
   end
 
   private
