@@ -1,9 +1,11 @@
 class UsersController < ApplicationController
   before_action :logged_in_user, only: [:index, :edit, :update, :destroy,
                                         :following, :followers, :notifications]
-  before_action :correct_user, only: [:edit, :update, :notifications]
-  before_action :admin_user, only: :destroy
   after_action :notification_was_open, only: :notifications
+  before_action :set_user, only: [:show, :edit, :update, :destroy, :notifications,
+                                  :following, :followers]
+  before_action :authorize_user, only: [:index, :new, :create]
+  after_action :verify_authorized
 
 
   def index
@@ -65,7 +67,7 @@ class UsersController < ApplicationController
 
   def notifications
       @title = "Notifications"
-      @users = @user.following
+      @users = @user.following unless @user.following.any?
       @notifications = current_user.notifications.paginate(page: params[:page])
   end
 
@@ -73,18 +75,18 @@ class UsersController < ApplicationController
   private
 
     def user_params
-      params.require(:user).permit(:name, :email, :password, :password_confirmation)
+      params.require(:user).permit(:name, :email, :password, :password_confirmation, :screen_name)
     end
 
     # before_action
 
-    def correct_user
+    def set_user
       @user = User.find(params[:id])
-      redirect_to(root_url) unless current_user?(@user)
+      authorize @user
     end
 
-    def admin_user
-      redirect_to(root_url) unless current_user.admin?
+    def authorize_user
+      authorize User
     end
 
     # after_action

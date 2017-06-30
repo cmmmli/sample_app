@@ -53,4 +53,13 @@ class FollowingTest < ActionDispatch::IntegrationTest
       delete relationship_path(relationship), xhr: true
     end
   end
+
+  test "should create notification" do
+    assert_difference '@other.notifications.count', 1 do
+      @user.follow(@other)
+    end
+    assert_equal @other.notifications.where(opened: false).count, 1
+    get notifications_user_path(@other)
+    # assert_equal @other.notifications.where(opened: false).count, 0
+  end
 end

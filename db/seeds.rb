@@ -5,7 +5,8 @@ User.create!(name:  "Example User",
              password_confirmation: "foobar",
              admin: true,
              activated: true,
-             activated_at: Time.zone.now)
+             activated_at: Time.zone.now,
+             screen_name: "example")
 
 99.times do |n|
   name  = Faker::Name.name
@@ -16,7 +17,8 @@ User.create!(name:  "Example User",
                password:              password,
                password_confirmation: password,
                activated: true,
-               activated_at: Time.zone.now)
+               activated_at: Time.zone.now,
+               screen_name: "example-#{n+1}")
 end
 
 User.create!(name: "komori", email: "thekomori1113@gmail.com",
@@ -24,7 +26,8 @@ User.create!(name: "komori", email: "thekomori1113@gmail.com",
              password_confirmation: "konmori",
              admin: true,
              activated: true,
-             activated_at: Time.zone.now)
+             activated_at: Time.zone.now,
+             screen_name: "komori")
 
 
 # micropost
@@ -42,3 +45,33 @@ following = users[2..50]
 followers = users[3..40]
 following.each {|followed| user.follow(followed)}
 followers.each {|follower| follower.follow(user)}
+
+
+#notification
+komori = User.find(101)
+followers.each { |follower| follower.follow(komori) }
+
+
+# group, group_user
+users = User.all
+groups = []
+50.times do |n|
+  group = Group.create!(name: "group-#{n+1}",
+                        detail: "group-#{n+1}")
+  users[n+1].join_group_by_admin(group.id)
+  groups << group
+end
+user = User.first
+groups.each do |group|
+  user.join_group_by_member(group.id)
+end
+
+
+# group_comment
+groups.each do |group|
+  group.users.each do |user|
+    Comment.create!(body: "Hi, I'm #{user.name}.",
+                    user_id: user.id,
+                    group_id: group.id)
+  end
+end
