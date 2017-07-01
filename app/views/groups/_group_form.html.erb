@@ -1,4 +1,4 @@
-<%= form_for @group do |f| %>
+<%= form_for(@group, url: yield(:action_url)) do |f| %>
   <%= render 'shared/error_messages', object: f.object %>
 
   <%= f.label :name %>
@@ -7,5 +7,5 @@
   <%= f.label :detail %>
   <%= f.text_field :detail, class: 'form-control' %>
 
-  <%= f.submit "Make group", class: "btn btn-primary" %>
+  <%= f.submit yield(:button_text), class: "btn btn-primary" %>
 <% end %>

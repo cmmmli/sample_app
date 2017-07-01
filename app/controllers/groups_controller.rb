@@ -35,11 +35,15 @@ class GroupsController < ApplicationController
   end
 
   def edit
-
   end
 
   def update
-
+    if @group.update_attributes(group_params)
+      flash[:success] = "group updated"
+      redirect_to @group
+    else
+      render 'edit'
+    end
   end
 
   def members

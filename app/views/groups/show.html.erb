@@ -5,9 +5,10 @@
       <h1>
         <%= @group.name %>
         <% if current_user.owner?(@group.id) || current_user.admin? %>
-         | <%= link_to "delete", @group, method: :delete, date: {confirm: "You sure?"} %>
+         | <%= link_to "delete", @group, method: :delete, date: {confirm: "You sure?"} %><br>
         <% end %>
       </h1>
+      <%= @group.detail %>
       <% if @group.users.any? %>
         <%= link_to "#{@group.users.count} join users", members_group_path(@group), class: "members" %>
       <% end %>
