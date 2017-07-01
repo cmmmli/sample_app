@@ -59,7 +59,5 @@ class FollowingTest < ActionDispatch::IntegrationTest
       @user.follow(@other)
     end
     assert_equal @other.notifications.where(opened: false).count, 1
-    get notifications_user_path(@other)
-    # assert_equal @other.notifications.where(opened: false).count, 0
   end
 end

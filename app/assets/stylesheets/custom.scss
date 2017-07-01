@@ -391,3 +391,19 @@ span.picture {
     margin-left: 60px;
   }
 }
+
+/* user_groups */
+
+.user-groups {
+  list-style: none;
+  padding: 0;
+  li {
+    padding: 10px 0;
+    border-top: 1px solid #e8e8e8;
+    // min-height: 80px
+  }
+  .group {
+    margin-top: 5em;
+    padding-top: 0;
+  }
+}

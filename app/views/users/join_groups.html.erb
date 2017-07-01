@@ -16,11 +16,11 @@
   </aside>
   <div class="col-md-8">
     <h3><%= @title %></h3>
-    <% if @users.any? %>
-      <ul class="users follow">
-        <%= render @users %>
+    <% if @groups.any? %>
+      <ul class="user-groups">
+        <%= render @groups %>
       </ul>
-      <%= will_paginate %>
+      <%= will_paginate @groups %>
     <% end %>
   </div>
 </div>

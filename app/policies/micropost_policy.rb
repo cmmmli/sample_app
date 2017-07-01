@@ -1,6 +1,6 @@
 class MicropostPolicy < ApplicationPolicy
   def create?
-    true
+    user.activated?
   end
 
   def destroy?

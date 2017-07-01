@@ -3,7 +3,7 @@ class UsersController < ApplicationController
                                         :following, :followers, :notifications]
   after_action :notification_was_open, only: :notifications
   before_action :set_user, only: [:show, :edit, :update, :destroy, :notifications,
-                                  :following, :followers]
+                                  :following, :followers, :join_groups]
   before_action :authorize_user, only: [:index, :new, :create]
   after_action :verify_authorized
 
@@ -53,22 +53,26 @@ class UsersController < ApplicationController
 
   def following
     @title = "Following"
-    @user = User.find(params[:id])
     @users = @user.following.paginate(page: params[:page])
     render 'show_follow'
   end
 
   def followers
     @title = "Followers"
-    @user = User.find(params[:id])
     @users = @user.followers.paginate(page: params[:page])
     render 'show_follow'
   end
 
   def notifications
       @title = "Notifications"
-      @users = @user.following unless @user.following.any?
+      @users = @user.following
       @notifications = current_user.notifications.paginate(page: params[:page])
+  end
+
+  def join_groups
+    @title = "JoinGroups"
+    @users = @user.following
+    @groups = @user.groups.paginate(page: params[:page])
   end
 
 

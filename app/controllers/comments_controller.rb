@@ -1,9 +1,10 @@
 class CommentsController < ApplicationController
   before_action :logged_in_user
-  before_action :correct_user, only: :destroy
+  before_action :set_group
+  before_action :set_comment, only: :destroy
+  before_action :authorize_comment, only: :create
 
   def create
-    @group = Group.find(params[:group_id])
     @comment = @group.comments.build(comment_params)
     if @comment.save
       flash[:success] = "Comments created!"
@@ -14,7 +15,6 @@ class CommentsController < ApplicationController
   end
 
   def destroy
-    @group = Group.find(params[:group_id])
     @comment.destroy
     flash[:success] = "Comment deleted"
     redirect_to group_url(@group)
@@ -25,8 +25,17 @@ class CommentsController < ApplicationController
       params.require(:comment).permit(:body).merge(user_id: current_user.id)
     end
 
-    def correct_user
+    def set_group
+      @group = Group.find(params[:group_id])
+    end
+
+    def set_comment
       @comment = current_user.comments.find_by(id: params[:id])
-      redirect_to root_url if @comment.nil?
+      authorize @comment
+    end
+
+    def authorize_comment
+      redirect_to group_url(@group) unless @group.users.include?(current_user)
+      authorize Comment
     end
 end

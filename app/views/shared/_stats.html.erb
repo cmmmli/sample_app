@@ -12,4 +12,10 @@
     </strong>
     followers
   </a>
+  <a href="<%= join_groups_user_path(@user) %>">
+    <strong id="join-groups" class="stat">
+      <%= @user.groups.count %>
+    </strong>
+    join groups
+  </a>
 </div>

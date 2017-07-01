@@ -38,4 +38,8 @@ class UserPolicy < ApplicationPolicy
   def notifications?
     record.id == user.id
   end
+
+  def join_groups?
+    true
+  end
 end
