@@ -3,4 +3,6 @@
     <%= render @feed_items %>
   </ol>
   <%= will_paginate @feed_items %>
+<% else %>
+  <h1><%= link_to "Let's follow sample-app's users", users_path, class: "center" %></h2>
 <% end %>

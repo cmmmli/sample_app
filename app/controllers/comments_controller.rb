@@ -35,7 +35,6 @@ class CommentsController < ApplicationController
     end
 
     def authorize_comment
-      redirect_to group_url(@group) unless @group.users.include?(current_user)
-      authorize Comment
+      current_user.member?(@group) ? (authorize Comment) : (redirect_to group_url(@group))
     end
 end

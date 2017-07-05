@@ -19,7 +19,8 @@ class User < ApplicationRecord
   validates :email, presence: true, length: {maximum: 255}, format: {with: VALID_EMAIL_REGEX}, uniqueness: {case_sensitive: false}
   has_secure_password
   validates :password, presence: true, length: {minimum: 6}, allow_nil: true
-  validates :screen_name, presence: true, length: {maximum: 15}, uniqueness: {case_sensitive: false}
+  VALID_SCREENNAME_REGEX = /(?<!\w)\w+/i
+  validates :screen_name, presence: true, length: {maximum: 15}, uniqueness: {case_sensitive: false}, format: {with: VALID_SCREENNAME_REGEX}
 
 
   # 渡された文字列のハッシュ値を返す
@@ -133,6 +134,14 @@ class User < ApplicationRecord
   def owner?(group_id)
     if group_user = group_users.find_by(group_id: group_id)
       group_user.role == 1
+    end
+  end
+
+  def member?(group)
+    if group.users.include?(self)
+      true
+    else
+      false
     end
   end
 

@@ -18,7 +18,7 @@ User.create!(name:  "Example User",
                password_confirmation: password,
                activated: true,
                activated_at: Time.zone.now,
-               screen_name: "example-#{n+1}")
+               screen_name: "example_#{n+1}")
 end
 
 User.create!(name: "komori", email: "thekomori1113@gmail.com",
@@ -37,6 +37,18 @@ users = User.order(:created_at).take(6)
   users.each {|user| user.microposts.create!(content: content)}
 end
 
+# reply
+users = User.order(:created_at).take(6)
+10.times do |n|
+  content = "@example_#{n+1} #{Faker::Lorem.sentence(5)}"
+  users.each do |user|
+    post = user.microposts.create!(content: content)
+    Reply.create do |r|
+      r.micropost_id = post.id
+      r.destination_id = "#{n+1}".to_i
+    end
+  end
+end
 
 # relationship
 users = User.all
