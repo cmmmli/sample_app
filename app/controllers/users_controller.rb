@@ -102,4 +102,5 @@ class UsersController < ApplicationController
         n.save
       end
     end
+
 end

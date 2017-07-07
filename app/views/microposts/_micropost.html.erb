@@ -20,4 +20,5 @@
   <span class="reply">
     <%= link_to "reply to this micropost", new_micropost_reply_path(micropost) %>
   </span>
+  <a href="<%= micropost_path(micropost.id) %>" class="micropost-link">show</a>
 </li>
