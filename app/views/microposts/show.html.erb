@@ -1,3 +1,24 @@
-<ol class="microposts">
-  <%= render @micropost %>
-</ol>
+<div class="main-post">
+  <ol class="microposts">
+    <% if @before_replies %>
+      <% @before_replies.reverse.each do |rep| %>
+        <% content = rep.content.sub(/(?<!\w)@\w+/i, "") %>
+        <% length = content.size %>
+        <% if length < 15 %>
+          <%= link_to "@#{rep.user.screen_name}, #{content}", micropost_path(rep.id) %> >
+        <% else %>
+          <%= link_to "@#{rep.user.screen_name}, #{content[0, 15]}...", micropost_path(rep.id) %> >
+        <% end %>
+      <% end %>
+      <%= link_to "@#{@to_micropost.user.screen_name}, #{@to_micropost.content.sub(/(?<!\w)@\w+/i, "")}", micropost_path(@to_micropost) %>
+    <% end %>
+    <div class="replies">
+      <%= render @before_replies[0] %>
+    </div>
+    <%= render @to_micropost %>
+      <div class="replies">
+        <%= render 'shared/reply_micropost_form' %>
+        <%= render @after_replies %>
+      </div>
+  </ol>
+</div>

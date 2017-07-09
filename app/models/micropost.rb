@@ -2,10 +2,12 @@ class Micropost < ApplicationRecord
   belongs_to :user
   has_many :mentioned_replies, class_name: "Reply",
               foreign_key: "destination_id"
-  has_many :mention_replies, class_name: "Reply",
+  has_one :mention_replies, class_name: "Reply",
               foreign_key: "micropost_id"
-  has_many :mentioned, through: :mentioned_replies, source: :destination
-  has_many :mention, through: :mention_replies, source: :micropost
+  # 送られてきたポスト
+  has_many :mentioned, through: :mentioned_replies, source: :micropost
+  # ポストの宛先
+  has_one :mention, through: :mention_replies, source: :destination
   default_scope -> {order(created_at: :desc)}
   mount_uploader :picture, PictureUploader
   validates :user_id, presence: true
@@ -29,16 +31,28 @@ class Micropost < ApplicationRecord
 
   def make_reply(address = nil)
     screen_name = content.match(/(?<!\w)@\w+/i)[0]
-    user = pick_user_from_micropost_content(screen_name)
-    Reply.create do |n|
-      n.micropost_id = self.id
-      n.destination_id = address if address
+    if pick_user_from_micropost_content(screen_name)
+      reply = Reply.create do |r|
+        r.micropost_id = self.id
+        r.destination_id = address if address
+      end
+      Notification.create do |n|
+        n.notifier_id = Micropost.find(address).user_id
+        n.notificationable = reply
+        n.body = "create"
+      end
     end
   end
 
   def pick_user_from_micropost_content(screen_name)
       screen_name[0] = ""     # @の取り除き
       User.find_by(screen_name: screen_name)
+  end
+
+  def collect_go_back_replies
+    parent = self.mention
+    return [] if parent.nil?
+    [parent] + parent.collect_go_back_replies
   end
 
 

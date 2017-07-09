@@ -7,9 +7,14 @@ class MicropostsController < ApplicationController
   def create
     @micropost = current_user.microposts.build(micropost_params)
     if @micropost.save
-      @micropost.make_reply if @micropost.reply?
-      flash[:success] = "Micropost created!"
-      redirect_to root_url
+      if @micropost.reply?
+        @micropost.make_reply
+        flash[:success] = "reply created!"
+        redirect_to micropost_url(@micropost)
+      else
+        flash[:success] = "Micropost created!"
+        redirect_to root_url
+      end
     else
       @feed_items = []
       render 'static_pages/home'
@@ -23,7 +28,13 @@ class MicropostsController < ApplicationController
   end
 
   def show
-    @micropost = Micropost.find(params[:id])
+    @to_micropost = Micropost.find(params[:id])
+    @after_replies = @to_micropost.mentioned
+    if @to_micropost.reply?
+      @before_replies = @to_micropost.collect_go_back_replies
+      # logger.info "MicropostsController#show - before_replies: #{@before_replies}"
+    end
+    @micropost = Micropost.new
   end
 
 

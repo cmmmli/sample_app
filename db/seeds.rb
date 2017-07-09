@@ -34,21 +34,17 @@ User.create!(name: "komori", email: "thekomori1113@gmail.com",
 users = User.order(:created_at).take(6)
 50.times do
   content = Faker::Lorem.sentence(5)
-  users.each {|user| user.microposts.create!(content: content)}
-end
-
-# reply
-users = User.order(:created_at).take(6)
-10.times do |n|
-  content = "@example_#{n+1} #{Faker::Lorem.sentence(5)}"
   users.each do |user|
+    reply_content = "@#{user.screen_name} #{Faker::Lorem.sentence(5)}"
     post = user.microposts.create!(content: content)
+    post2 = user.microposts.create!(content: reply_content)
     Reply.create do |r|
-      r.micropost_id = post.id
-      r.destination_id = "#{n+1}".to_i
+      r.destination_id = post.id
+      r.micropost_id = post2.id
     end
   end
 end
+
 
 # relationship
 users = User.all

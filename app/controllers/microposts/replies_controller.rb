@@ -1,15 +1,16 @@
 class Microposts::RepliesController < ApplicationController
-  def new
-    @to_micropost = Micropost.find(params[:micropost_id])
-    @micropost = Micropost.new
-  end
 
   def create
     @micropost = current_user.microposts.build(micropost_params)
     if @micropost.save
-      @micropost.make_reply(@mentioned_id) if @micropost.reply?
-      flash[:success] = "Micropost created!"
-      redirect_to root_url
+      if @micropost.reply?
+        @micropost.make_reply(@mentioned_id)
+        flash[:success] = "reply created!"
+        redirect_to micropost_url(@mentioned_id)
+      else
+        flash[:success] = "Micropost created!"
+        redirect_to root_url
+      end
     else
       @feed_items = []
       render 'static_pages/home'
@@ -19,7 +20,7 @@ class Microposts::RepliesController < ApplicationController
   private
 
     def micropost_params
-      @mentioned_id = params[:micropost_id]
+      @mentioned_id = params[:micropost_id] || params[:id]
       params.require(:micropost).permit(:content, :picture)
     end
 end

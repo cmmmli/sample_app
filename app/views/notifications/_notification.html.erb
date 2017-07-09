@@ -3,14 +3,24 @@
 <% else %>
   <% read_status = "already-read" %>
 <% end %>
-<li id="notification-<%= notification.id %>" class=<%= read_status %> >
-  <% other_user =  Relationship.find(notification[:notificationable_id]).follower %>
-  <%= link_to gravatar_for(other_user, size: 50), other_user %>
+<li id="notification-<%= notification.id %>" class=<%= "#{read_status}" %> >
+  <% type = notification[:notificationable_type] %>
+  <% case type %>
+  <% when "Relationship" %>
+    <% content = "Followed" %>
+    <% other_user = Relationship.find(notification[:notificationable_id]).follower %>
+    <%= link_to gravatar_for(other_user, size: 50), other_user %>
+  <% when "Reply" %>
+    <% content = "Mentioned" %>
+    <% post = Reply.find(notification[:notificationable_id]).micropost %>
+    <% other_user = post.user %>
+    <%= link_to gravatar_for(other_user, size: 50), other_user %>
+  <% end %>
   <span class="user">
-    Followed by <%= link_to other_user.name, other_user %>
-    
+    <%= content %> by <%= link_to other_user.name, other_user %>
   </span>
   <span class="body">
+    <%= link_to post.content.sub(/(?<!\w)@\w+/i, ""), micropost_path(post) if post %><br>
     <%= time_ago_in_words(notification.created_at) %> ago.
   </span>
 </li>
