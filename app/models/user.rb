@@ -10,6 +10,8 @@ class User < ApplicationRecord
   has_many :group_users, dependent: :destroy
   has_many :groups, through: :group_users
   has_many :comments, dependent: :destroy
+  has_many :book_users
+  has_many :books, through: :book_users
 
   attr_accessor :remember_token, :activation_token, :reset_token
   before_save :downcase_email

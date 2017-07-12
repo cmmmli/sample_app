@@ -1,0 +1,32 @@
+<%= form_for(@book, url: yield(:action_url)) do |f| %>
+  <%= render 'shared/error_messages', object: f.object %>
+
+  <%= f.label :title %>
+  <%= f.text_field :title, class: 'form-control' %>
+
+  <%= f.label :content %>
+  <%= f.text_field :content, class: 'form-control' %>
+
+  <%= f.label :chapters %>
+  <div id="book_chapters_box">
+    <%= f.fields_for :chapters do |c| %>
+      <% c_index = "#{c.index}" %>
+      <% id = "add_chapter_#{c_index}" %>
+      <div class="js-book_chapter input-group" id="<%= id %>">
+        <%= c.text_field :title,
+        placeholder: "#{c_index.to_i + 1}章",
+        class: 'form-control' %>
+        <%= c.check_box :_destroy, class: 'delete-chapter-box' %>
+        <span class="chapter_delete input-group-btn" data-id="<%= c_index %>", data-default='default'>
+          <button type="button" class="btn btn-warning">-</button>
+        </span>
+      </div>
+    <% end %>
+  </div>
+  <%# [+]ボタンがページ遷移後は反応しないバグ有 %>
+  <p id="add_item_button">
+    <button type="button" class="btn btn-secondary">+</button>
+  </p>
+  <p>[+]が反応しない場合はリロードしてください</p>
+  <%= f.submit yield(:button_text), class: "btn btn-primary" %>
+<% end %>

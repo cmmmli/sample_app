@@ -1,0 +1,10 @@
+<% provide(:title, 'Make book') %>
+<% provide(:button_text, 'make a book') %>
+<% provide(:action_url, books_path) %>
+
+<h1>Make book</h1>
+<div class="row">
+  <div class="col-md-6 col-md-offset-3">
+    <%= render 'book_form' %>
+  </div>
+</div>

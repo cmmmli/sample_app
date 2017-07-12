@@ -17,6 +17,7 @@ gem 'fog',            '1.38.0'
 gem 'will_paginate',  '3.1.0'
 gem 'bootstrap-will_paginate',  '0.0.10'
 gem 'pundit'
+gem 'jquery-turbolinks'
 
 
 group :development, :test do

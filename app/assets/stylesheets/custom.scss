@@ -419,3 +419,25 @@ span.picture {
     padding-top: 0;
   }
 }
+
+/* books index */
+
+.books {
+  list-style: none;
+  margin: 0;
+  li {
+    overflow: auto;
+    padding: 10px 0;
+    border-bottom: 1px solid $gray-lighter;
+  }
+}
+
+/* books index */
+
+input.delete-chapter-box {
+  display: none;
+};
+
+div.js-book_chapter {
+  padding-bottom: 5px;
+}

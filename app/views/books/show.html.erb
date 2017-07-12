@@ -1,0 +1,17 @@
+<% provide(:title, @book.title) %>
+<div class="row">
+  <aside class="col-md-4">
+    <section class="book_info">
+      <h1>
+        <%= @book.title %>
+      </h1>
+      <%= @book.content %>
+      <% if @book.users.any? %>
+        <!-- リーディングリスト -->
+      <% end %>
+    </section>
+  </aside>
+  <div class="col-md-8">
+    <!-- 本の登録ボタン -->
+  </div>
+</div>

@@ -1,0 +1,13 @@
+<% provide(:title, 'All books') %>
+<h1>All books</h1>
+<h4>
+<%= link_to "Registration New Book", new_book_path, data: { turbolink: false } %>
+</h4>
+
+<%= will_paginate @books %>
+
+<ul class="books">
+  <%= render @books %>
+</ul>
+
+<%= will_paginate @books %>
