@@ -437,7 +437,25 @@ span.picture {
 input.delete-chapter-box {
   display: none;
 };
+input.chapter-number {
+  width: 60px !important;
+  height: 20px !important;
+}
 
 div.js-book_chapter {
   padding-bottom: 5px;
+}
+
+.chapters {
+  list-style: none;
+  padding: 0;
+  margin-top: 20px;
+  li {
+    padding: 5px 0;
+    border-top: 1px solid #e8e8e8;
+  }
+  .user {
+    margin-top: 5em;
+    padding-top: 0;
+  }
 }

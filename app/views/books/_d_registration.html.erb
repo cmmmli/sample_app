@@ -1,0 +1,4 @@
+<%= form_for(current_user.book_users.find_by(book_id: @book.id),
+             html: { method: :delete }, remote: true) do |f| %>
+  <%= f.submit "Delete Registration", class: "btn" %>
+<% end %>

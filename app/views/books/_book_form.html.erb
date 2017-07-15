@@ -13,20 +13,56 @@
       <% c_index = "#{c.index}" %>
       <% id = "add_chapter_#{c_index}" %>
       <div class="js-book_chapter input-group" id="<%= id %>">
+        <span class="input-group-addon">
+          <%= c.number_field :chapter_num, class: 'form-control chapter-number', value: (c.object.chapter_num || 1) %>
+        </span>
         <%= c.text_field :title,
-        placeholder: "#{c_index.to_i + 1}章",
+        placeholder: "chapter_title",
         class: 'form-control' %>
         <%= c.check_box :_destroy, class: 'delete-chapter-box' %>
-        <span class="chapter_delete input-group-btn" data-id="<%= c_index %>", data-default='default'>
+        <% title = c.object.title || 'default' %>
+        <span class="chapter_delete input-group-btn" data-id="<%= c_index %>", data-default='<%= title %>'>
           <button type="button" class="btn btn-warning">-</button>
         </span>
       </div>
     <% end %>
   </div>
-  <%# [+]ボタンがページ遷移後は反応しないバグ有 %>
   <p id="add_item_button">
     <button type="button" class="btn btn-secondary">+</button>
   </p>
-  <p>[+]が反応しない場合はリロードしてください</p>
   <%= f.submit yield(:button_text), class: "btn btn-primary" %>
 <% end %>
+
+<script>
+$(function() {
+  var chapter_num = $('.js-book_chapter').length;
+  $('#add_item_button').on('click', function() {
+    var input =
+        '<div class="js-book_chapter input-group" id="add_chapter_' + chapter_num + '">'
+        + '<span class="input-group-addon">'
+        +   '<input class="form-control chapter-number" type="number" name="book[chapters_attributes][' + chapter_num + '][chapter_num]" id="book_chapters_attributes_' + chapter_num + '_chapter_num" value="' + (chapter_num + 1) + '" required>'
+        + '</span>'
+        + '<input class="form-control" placeholder="chapter title" type="text" name="book[chapters_attributes][' + chapter_num + '][title]" id="book_chapters_attributes_' + chapter_num + '_title" required>'
+        + '<span class="chapter_delete input-group-btn" data-id="' + chapter_num + '" data-default="default">'
+        +   '<button type="button" class="btn btn-warning">-</button>'
+        + '</span>'
+        +'</div>'
+    $('#book_chapters_box').append(input);
+    chapter_num ++;
+  });
+
+  $('#book_chapters_box').on('click', '.chapter_delete', function() {
+    var inputId = $(this).data('id');
+    var defaultData = $(this).data('default');
+    console.log(inputId);
+    console.log(defaultData);
+    if (defaultData == 'default') {
+      $('#add_chapter_' + inputId).remove();
+    }else{
+      $(this).prev().prop('checked', true);
+      $('#add_chapter_' + inputId).hide();
+    }
+  });
+});
+
+</script>

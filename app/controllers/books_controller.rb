@@ -8,6 +8,8 @@ class BooksController < ApplicationController
   end
 
   def show
+    @chapters = @book.chapters
+    @users = @book.users
   end
 
   def new
@@ -17,7 +19,11 @@ class BooksController < ApplicationController
 
   def create
     @book = Book.new(book_params)
+    @book.chapters.each_with_index do |chapter, i|
+      chapter.add_chapter_num(i + 1)
+    end
     if @book.save
+      current_user.register_book_as_owner(@book)
       redirect_to book_url(@book)
     else
       render 'new'
@@ -45,7 +51,7 @@ class BooksController < ApplicationController
   private
     def book_params
       params.require(:book).permit(:title, :content,
-                                   chapters_attributes: [:title])
+                                   chapters_attributes: [:title, :chapter_num, :_destroy, :id])
     end
 
     def set_book

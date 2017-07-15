@@ -139,6 +139,7 @@ class User < ApplicationRecord
     end
   end
 
+  # TODO: joining?と被ってる。削除する
   def member?(group)
     if group.users.include?(self)
       true
@@ -146,6 +147,37 @@ class User < ApplicationRecord
       false
     end
   end
+
+  # 読書管理機能のメソッド
+
+  def register_book_as_owner(book)
+    self.register_book(book, 1)
+  end
+
+  def register_book_as_normal_user(book)
+    self.register_book(book, 2)
+  end
+
+  def register_book(book, role)
+    book_users.create do |n|
+      n.book_id = book.id
+      n.user_id = self.id
+      n.role = role
+    end
+  end
+
+  def delete_book_registration(book)
+    book_users.find_by(book_id: book.id).destroy
+  end
+
+  def book_is_registered?(book)
+    books.include?(book)
+  end
+
+  def book_owner?(book)
+    book_users.find_by(book_id: book.id).role == 1 ? true : false
+  end
+
 
 
   private

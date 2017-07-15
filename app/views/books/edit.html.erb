@@ -1,0 +1,10 @@
+<% provide(:title, "Edit Book") %>
+<% provide(:button_text, "Save changes") %>
+<% provide(:action_url, book_path) %>
+<h1>Update book information</h1>
+
+<div class="row">
+  <div class="col-md-6 col-md-offset-3">
+    <%= render 'book_form' %>
+  </div>
+</div>

@@ -6,4 +6,5 @@ class Book < ApplicationRecord
 
   validates :title, presence: true, length: {maximum: 50}, uniqueness: {case_sensitive: false}
   validates :content, presence: true
+
 end

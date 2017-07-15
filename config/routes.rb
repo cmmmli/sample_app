@@ -27,4 +27,5 @@ Rails.application.routes.draw do
   end
   resources :group_users, only: [:create, :destroy]
   resources :books
+  resources :book_users, only: [:create, :destroy]
 end

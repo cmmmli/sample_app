@@ -5,13 +5,24 @@
       <h1>
         <%= @book.title %>
       </h1>
-      <%= @book.content %>
-      <% if @book.users.any? %>
-        <!-- リーディングリスト -->
+      <% if current_user.book_owner?(@book) %>
+        <%= link_to "delete", @book, method: :delete, date: {confirm: "You sure?"} %>
+         | <%= link_to "edit", edit_book_path(@book) %><br>
       <% end %>
+      <%= @book.content %>
+      <ol class="chapters">
+      <%= "[chapters]" %>
+        <%= render @chapters %>
+      </ol>
     </section>
   </aside>
   <div class="col-md-8">
-    <!-- 本の登録ボタン -->
+    <%= render 'registration_form' if logged_in? %>
+    <% if @users.any? %>
+    <h3>Reading users</h3>
+     <ul class="users">
+       <%= render @users %>
+     </ul>
+    <% end %>
   </div>
 </div>

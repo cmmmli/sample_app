@@ -1,0 +1,7 @@
+<div id="registration_form">
+<% if current_user.book_is_registered?(@book) %>
+  <%= render 'd_registration' %>
+<% else %>
+  <%= render 'registration' %>
+<% end %>
+</div>

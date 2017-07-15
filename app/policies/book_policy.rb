@@ -24,7 +24,7 @@ class BookPolicy < ApplicationPolicy
   end
 
   def destroy?
-    user.admin? || record.book_users.find_by(user_id: user.id).role == 1
+    record.book_users.find_by(user_id: user.id).role == 1
   end
 
 end
