@@ -1,0 +1,7 @@
+<%= form_for(chapter.reading_progresses.build,
+  url: book_reading_progresses_path(@book_user),
+  remote: true) do |f| %>
+  <%= hidden_field_tag :book_user_id, @book_user.id %>
+  <%= hidden_field_tag :chapter_id, chapter.id %>
+  <%= f.submit "Read", class: "btn btn-primary" %>
+<% end %>

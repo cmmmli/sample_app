@@ -1,3 +1,12 @@
-<li>
-  <%= chapter.title %>
+<li class="chapter">
+  <div class="chapter-title">
+    <%= chapter.title %>
+  </div>
+  <div class="read-form" id="read_form_<%= chapter.id %>">
+    <% if progress = chapter.read?(@book_user) %>
+      <%= render 'unread', {chapter: chapter, progress: progress} %>
+    <% else %>
+      <%= render 'read', {chapter: chapter} %>
+    <% end %>
+  </div>
 </li>

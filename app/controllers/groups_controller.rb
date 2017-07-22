@@ -10,7 +10,7 @@ class GroupsController < ApplicationController
 
   def show
     @comment = @group.comments.build
-    @comments = @group.comments.paginate(page: params[:page])
+    @comments = @group.comments.includes(:user).paginate(page: params[:page])
   end
 
   def new

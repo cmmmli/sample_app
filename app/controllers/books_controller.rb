@@ -1,6 +1,6 @@
 class BooksController < ApplicationController
   before_action :logged_in_user, only: [:new, :create, :destroy]
-  before_action :set_book, only: [:show, :destroy, :edit, :update]
+  before_action :set_book, only: [:show, :destroy, :edit, :update, :register]
   before_action :authorize_book, only: [:index, :new, :create]
 
   def index
@@ -8,8 +8,9 @@ class BooksController < ApplicationController
   end
 
   def show
-    @chapters = @book.chapters
     @users = @book.users
+    @book_user = @book.book_users.find_by(user_id: current_user.id)
+    @chapters = @book.chapters
   end
 
   def new
@@ -19,9 +20,6 @@ class BooksController < ApplicationController
 
   def create
     @book = Book.new(book_params)
-    @book.chapters.each_with_index do |chapter, i|
-      chapter.add_chapter_num(i + 1)
-    end
     if @book.save
       current_user.register_book_as_owner(@book)
       redirect_to book_url(@book)
@@ -31,6 +29,7 @@ class BooksController < ApplicationController
   end
 
   def edit
+    @chapters = @book.chapters.rank(:row_order)
   end
 
   def update
@@ -51,7 +50,7 @@ class BooksController < ApplicationController
   private
     def book_params
       params.require(:book).permit(:title, :content,
-                                   chapters_attributes: [:title, :chapter_num, :_destroy, :id])
+                                   chapters_attributes: [:title, :row_order_position, :_destroy, :id])
     end
 
     def set_book

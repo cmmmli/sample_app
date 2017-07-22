@@ -56,7 +56,7 @@ followers.each {|follower| follower.follow(user)}
 
 
 #notification
-komori = User.find(101)
+komori = User.last
 followers.each { |follower| follower.follow(komori) }
 
 
@@ -81,5 +81,53 @@ groups.each do |group|
     Comment.create!(body: "Hi, I'm #{user.name}.",
                     user_id: user.id,
                     group_id: group.id)
+  end
+end
+
+
+# book
+komori = User.last
+user = User.first
+book1 = Book.create do |n|
+  n.title = "メタプログラミングRuby"
+  n.content = "説明"
+end
+book2 = Book.create do |n|
+  n.title = "book2"
+  n.content = "説明"
+end
+books = [book1, book2]
+
+# chapter
+books.each do |book|
+  5.times do |n|
+    book.chapters.create do |c|
+      c.title = "chapter-#{n+1}"
+    end
+  end
+end
+
+# book_user
+books.each_with_index do |book, i|
+  book.book_users.create do |n|
+    n.user_id = user.id
+    n.role = i + 1
+  end
+end
+books.reverse.each_with_index do |book, i|
+  book.book_users.create do |n|
+    n.user_id = komori.id
+    n.role = i + 1
+  end
+end
+
+# reading_progresses
+book_users = BookUser.all
+book_users.each do |bookuser|
+  bookuser.book.chapters.each_with_index do |chapter, i|
+    ReadingProgress.create do |n|
+      n.book_user_id = bookuser.id
+      n.chapter_id = chapter.id
+    end
   end
 end

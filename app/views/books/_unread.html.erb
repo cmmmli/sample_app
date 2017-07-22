@@ -1,0 +1,5 @@
+<%= form_for(chapter.reading_progresses.find_by(book_user_id: @book_user.id),
+              url: book_reading_progress_path(@book, progress),
+              html: { method: :delete }, remote: true) do |f| %>
+  <%= f.submit "Unread", class: "btn" %>
+<% end %>

@@ -5,24 +5,32 @@
       <h1>
         <%= @book.title %>
       </h1>
-      <% if current_user.book_owner?(@book) %>
+      <% if current_user.book_owner?(@book) || current_user.admin? %>
         <%= link_to "delete", @book, method: :delete, date: {confirm: "You sure?"} %>
          | <%= link_to "edit", edit_book_path(@book) %><br>
       <% end %>
       <%= @book.content %>
-      <ol class="chapters">
-      <%= "[chapters]" %>
-        <%= render @chapters %>
-      </ol>
+      <% if @users.any? %>
+        <h4>Reading users</h4>
+        <ul class="users">
+          <% @users.each do |user| %>
+            <li class="user">
+              <%= link_to "#{user.name}", user_path(user) %>
+              <%= "@#{user.screen_name}" %>
+              <% bookuser = user.book_users.find_by(book_id: @book.id) %>
+              <strong class="read_status"><%= "#{bookuser.read_status.to_i}%" %></strong>
+            </li>
+          <% end %>
+        </ul>
+      <% end %>
     </section>
   </aside>
   <div class="col-md-8">
     <%= render 'registration_form' if logged_in? %>
-    <% if @users.any? %>
-    <h3>Reading users</h3>
-     <ul class="users">
-       <%= render @users %>
-     </ul>
-    <% end %>
+    <ol class="chapters">
+      <h3>Chapters</h3>
+      <h3>You are reading <%= "#{@book_user.read_status.to_i}%" %></h3>
+      <%= render @chapters %>
+    </ol>
   </div>
 </div>

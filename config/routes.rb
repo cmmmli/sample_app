@@ -26,6 +26,9 @@ Rails.application.routes.draw do
     end
   end
   resources :group_users, only: [:create, :destroy]
-  resources :books
+  resources :books do
+    resources :reading_progresses, only: [:create, :destroy], module: "books"
+  end
   resources :book_users, only: [:create, :destroy]
+  resources :reading_progresses, only: :update
 end

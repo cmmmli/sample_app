@@ -16,7 +16,9 @@ class BookPolicy < ApplicationPolicy
   end
 
   def update?
-    user.admin? || record.book_users.find_by(user_id: user.id).role == 1
+    if bookuser = record.book_users.find_by(user_id: user.id)
+      bookuser.role == 1
+    end
   end
 
   def edit?
@@ -24,7 +26,11 @@ class BookPolicy < ApplicationPolicy
   end
 
   def destroy?
-    record.book_users.find_by(user_id: user.id).role == 1
+    user.admin? || record.book_users.find_by(user_id: user.id).role == 1
+  end
+
+  def register?
+    user.book_is_registered?(record)
   end
 
 end

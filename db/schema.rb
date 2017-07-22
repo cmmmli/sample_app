@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170714073450) do
+ActiveRecord::Schema.define(version: 20170721104315) do
 
   create_table "book_users", force: :cascade do |t|
     t.integer  "book_id"
@@ -34,10 +34,9 @@ ActiveRecord::Schema.define(version: 20170714073450) do
   create_table "chapters", force: :cascade do |t|
     t.integer  "book_id"
     t.string   "title"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
-    t.integer  "chapter_num"
-    t.index ["book_id", "chapter_num"], name: "index_chapters_on_book_id_and_chapter_num", unique: true
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer  "row_order"
     t.index ["book_id"], name: "index_chapters_on_book_id"
   end
 
@@ -89,6 +88,16 @@ ActiveRecord::Schema.define(version: 20170714073450) do
     t.boolean  "opened",                default: false
     t.datetime "created_at",                            null: false
     t.datetime "updated_at",                            null: false
+  end
+
+  create_table "reading_progresses", force: :cascade do |t|
+    t.integer  "chapter_id"
+    t.integer  "book_user_id"
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
+    t.index ["book_user_id"], name: "index_reading_progresses_on_book_user_id"
+    t.index ["chapter_id", "book_user_id"], name: "index_reading_progresses_on_chapter_id_and_book_user_id", unique: true
+    t.index ["chapter_id"], name: "index_reading_progresses_on_chapter_id"
   end
 
   create_table "relationships", force: :cascade do |t|

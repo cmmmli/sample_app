@@ -139,14 +139,6 @@ class User < ApplicationRecord
     end
   end
 
-  # TODO: joining?と被ってる。削除する
-  def member?(group)
-    if group.users.include?(self)
-      true
-    else
-      false
-    end
-  end
 
   # 読書管理機能のメソッド
 
@@ -159,7 +151,7 @@ class User < ApplicationRecord
   end
 
   def register_book(book, role)
-    book_users.create do |n|
+    book_user = book_users.create do |n|
       n.book_id = book.id
       n.user_id = self.id
       n.role = role
@@ -175,7 +167,8 @@ class User < ApplicationRecord
   end
 
   def book_owner?(book)
-    book_users.find_by(book_id: book.id).role == 1 ? true : false
+    return false unless bookuser = book_users.find_by(book_id: book.id)
+    bookuser.role == 1 ? true : false
   end
 
 

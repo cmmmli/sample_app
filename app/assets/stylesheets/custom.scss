@@ -459,3 +459,40 @@ div.js-book_chapter {
     padding-top: 0;
   }
 }
+
+p#add_item_button button {
+  margin-top: 10px;
+}
+
+ul#sortable {
+  padding-left: 0;
+  margin-bottom: 0;
+}
+
+.ui-state-default {
+  list-style: none;
+  padding-left: 34px;
+  div {
+    padding-bottom: 0;
+  }
+}
+
+/* read-form */
+li.chapter {
+  display: block;
+  overflow: hidden;
+}
+
+.chapter-title {
+  float: left;
+}
+
+.read-form {
+  width: 100px;
+  display: inline-block;
+  float: right;
+}
+
+.read_status {
+  float: right;
+}
