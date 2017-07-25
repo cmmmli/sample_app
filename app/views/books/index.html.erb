@@ -1,5 +1,6 @@
 <% provide(:title, 'All books') %>
 <h1>All books</h1>
+<%= link_to "all tags", tags_path %>
 <h4>
 <%= link_to "Registration New Book", new_book_path, data: { turbolink: false } %>
 </h4>

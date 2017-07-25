@@ -78,9 +78,11 @@ end
 # group_comment
 groups.each do |group|
   group.users.each do |user|
-    Comment.create!(body: "Hi, I'm #{user.name}.",
-                    user_id: user.id,
-                    group_id: group.id)
+    group.comments.create! do |n|
+      n.body = "Hi, I'm #{user.name}"
+      n.user_id = user.id
+      n.group_id = group.id
+    end
   end
 end
 
@@ -104,6 +106,23 @@ books.each do |book|
     book.chapters.create do |c|
       c.title = "chapter-#{n+1}"
     end
+  end
+end
+
+# tag
+30.times do |n|
+  Tag.create do |t|
+    t.name = "tag-#{n+1}"
+  end
+end
+
+# book_tag
+book = Book.first
+tags = Tag.all[0..9]
+tags.each do |tag|
+  BookTag.create do |n|
+    n.book_id = book.id
+    n.tag_id = tag.id
   end
 end
 

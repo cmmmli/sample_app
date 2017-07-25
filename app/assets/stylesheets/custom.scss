@@ -432,15 +432,9 @@ span.picture {
   }
 }
 
-/* books index */
-
 input.delete-chapter-box {
   display: none;
 };
-input.chapter-number {
-  width: 60px !important;
-  height: 20px !important;
-}
 
 div.js-book_chapter {
   padding-bottom: 5px;
@@ -469,6 +463,10 @@ ul#sortable {
   margin-bottom: 0;
 }
 
+ul#editable {
+  padding-left: 0;
+  margin-bottom: 0;
+}
 .ui-state-default {
   list-style: none;
   padding-left: 34px;
@@ -495,4 +493,42 @@ li.chapter {
 
 .read_status {
   float: right;
+}
+
+input.delete-tag-box {
+  display: none;
+};
+
+div.js-book_tag {
+  padding-bottom: 5px;
+}
+
+.ui-state-tag {
+  list-style: none;
+  div {
+    padding-bottom: 0;
+  }
+}
+
+ul.ui-autocomplete {
+  position: absolute;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border: solid 1px #999;
+  cursor: default;
+  li {
+    background-color: #FFF;
+    border-top: solid 1px #DDD;
+    margin: 0;
+    padding: 2px 15px;
+    a {
+      color: #000;
+      display: block;
+      padding: 3px;
+    }
+    a.ui-state-hover, a.ui-state-active {
+      background-color: #FFFCB2;
+    }
+  }
 }

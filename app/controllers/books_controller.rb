@@ -1,16 +1,17 @@
 class BooksController < ApplicationController
   before_action :logged_in_user, only: [:new, :create, :destroy]
-  before_action :set_book, only: [:show, :destroy, :edit, :update, :register]
+  before_action :set_book, only: [:show, :destroy, :edit, :update, :tag_manager]
   before_action :authorize_book, only: [:index, :new, :create]
 
   def index
-    @books = Book.all.paginate(page: params[:page])
+    @books = Book.all.includes(:tags).paginate(page: params[:page])
   end
 
   def show
     @users = @book.users
     @book_user = @book.book_users.find_by(user_id: current_user.id)
     @chapters = @book.chapters
+    @tags = @book.tags
   end
 
   def new
@@ -47,14 +48,19 @@ class BooksController < ApplicationController
     redirect_to books_url
   end
 
+  def tag_manager
+    @book_tags = @book.book_tags
+  end
+
   private
     def book_params
       params.require(:book).permit(:title, :content,
-                                   chapters_attributes: [:title, :row_order_position, :_destroy, :id])
+                                   chapters_attributes: [:title, :row_order_position, :_destroy, :id],
+                                   book_tags_attributes: [:book_id, :tag_id, :_destroy, :id])
     end
 
     def set_book
-      @book = Book.find(params[:id])
+      @book = Book.includes(:book_tags => :tag).find(params[:id])
       authorize @book
     end
 

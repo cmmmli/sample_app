@@ -1,0 +1,125 @@
+<h1>Tag a book</h1>
+<div class="row">
+  <div class="col-md-6 col-md-offset-3">
+    <%= form_for(@book, url: book_tags_path,
+                        remote: true) do |f| %>
+      <%= render 'shared/error_messages', object: f.object %>
+
+      <%= f.label :Tags %>
+      <div id="book_tags_box">
+        <ul id="editable">
+          <%= f.fields_for :book_tags do |t| %>
+            <li class="ui-state-tag" id="<%= "add_tag_#{t.index}" %>">
+              <div class="js-book_tag input-group">
+                <%= hidden_field_tag "book[book_tags_attributes][#{t.index}][tag_id]", t.object.tag.id, id: "book_book_tags_attributes_#{t.index}_id" %>
+                <%= text_field_tag :name, t.object.tag.name,
+                                  placeholder: "tag-name",
+                                  class: "form-control book_tag_field" %>
+                <%= t.check_box :_destroy, class: 'delete-tag-box' %>
+                <% title = t.object.tag.name || 'default' %>
+                <span class="tag_delete input-group-btn"
+                      data-id="<%= "#{t.index}" %>"
+                      data-default="<%= title %>">
+                      <button type="button" class="btn btn-warning">-</button>
+                    </span>
+              </div>
+            </li>
+          <% end %>
+        </ul>
+      </div>
+      <p id="add_tag_button">
+        <button type="button" class="btn btn-secondary">+</button>
+      </p>
+      <%= f.submit "tagging", class: "btn btn-primary" %>
+    <% end %>
+  </div>
+</div>
+
+
+<script>
+$(function() {
+  var tag_num = $('.js-book_tag').length;
+  $('#add_tag_button').on('click', function() {
+    var input2 =
+      '<li class="ui-state-tag" id="add_tag_' + tag_num + '">'
+      + '<div class="js-book_tag input-group">'
+      +   '<input type="hidden" name="book[book_tags_attributes][' + tag_num + '][tag_id]" id="book_book_tags_attributes_' + tag_num + '_id" value="nil">'
+      +   '<input class="form-control book_tag_field" placeholder="tag-name" type="text" name="book[tags_attributes][' +   tag_num + '][title]" id="book_tags_attributes_' + tag_num + '_title" required>'
+      +   '<span class="tag_delete input-group-btn" data-id="' + tag_num + '" data-default="default">'
+      +     '<button type="button" class="btn btn-warning">-</button>'
+      +   '</span>'
+      +  '</div>'
+      +'</li>'
+    $('#editable').append(input2);
+    tag_num ++;
+    refreshSearchTags();
+    tagCreatWithEnter();
+  });
+
+  $('#book_tags_box').on('click', '.tag_delete', function() {
+    var inputId = $(this).data('id');
+    var defaultData = $(this).data('default');
+    if (defaultData == 'default') {
+      $('#add_tag_' + inputId).remove();
+    }else{
+      $(this).prev().prop('checked', true);
+      $('#add_tag_' + inputId).hide();
+    }
+  });
+});
+
+$(function() {
+  refreshSearchTags();
+  tagCreatWithEnter();
+});
+
+function refreshSearchTags() {
+   $(".book_tag_field").autocomplete({
+    source: function(req, res) {
+      return $.ajax({
+        url: "/api/tags?name=" + encodeURIComponent(req.term),
+        dataType: "json",
+        success: function(data) {
+          names = data.map(function(element, index, array) {
+            return element.name;
+          });
+          tags = data.map(function(element, index, array) {
+            return [element.name, element.id];
+          });
+          return res(names);
+        }
+      });
+    },
+    select: function( event, ui ) {
+      $(event.target).prev()[0].value = ui.item.value
+      $(tags).each(function() {
+        if (this[0] == ui.item.value) {
+          tag_id = this[1]
+        }
+      });
+      $(event.target).prev()[0].value = tag_id;
+    },
+    autoFocus: true,
+    delay: 130,
+    minLength: 2
+  });
+}
+
+function tagCreatWithEnter() {
+  $( '.book_tag_field' ).blur(function() {
+    var val = $(this).val();
+    that = $(this)
+    $.ajax({
+      url: "/api/tags?name=" + encodeURIComponent(val),
+      type: "POST",
+      dataType: "json",
+      success: function(data) {
+        tagid = data.id
+        that.prev()[0].value = data.id
+      }
+    });
+  });
+}
+
+
+</script>

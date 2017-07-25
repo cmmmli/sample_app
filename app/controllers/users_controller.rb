@@ -66,7 +66,8 @@ class UsersController < ApplicationController
   def notifications
       @title = "Notifications"
       @users = @user.following
-      @notifications = current_user.notifications.paginate(page: params[:page])
+      # n + 1問題有り(今はホワイトリストで無視している)
+      @notifications = current_user.notifications.includes(:notificationable).paginate(page: params[:page])
   end
 
   def join_groups

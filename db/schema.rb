@@ -10,7 +10,17 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170721104315) do
+ActiveRecord::Schema.define(version: 20170723090608) do
+
+  create_table "book_tags", force: :cascade do |t|
+    t.integer  "book_id"
+    t.integer  "tag_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["book_id", "tag_id"], name: "index_book_tags_on_book_id_and_tag_id", unique: true
+    t.index ["book_id"], name: "index_book_tags_on_book_id"
+    t.index ["tag_id"], name: "index_book_tags_on_tag_id"
+  end
 
   create_table "book_users", force: :cascade do |t|
     t.integer  "book_id"
@@ -43,9 +53,12 @@ ActiveRecord::Schema.define(version: 20170721104315) do
   create_table "comments", force: :cascade do |t|
     t.text     "body"
     t.integer  "group_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
     t.integer  "user_id"
+    t.string   "commentable_type"
+    t.integer  "commentable_id"
+    t.index ["commentable_type", "commentable_id"], name: "index_comments_on_commentable_type_and_commentable_id"
     t.index ["group_id"], name: "index_comments_on_group_id"
     t.index ["user_id"], name: "index_comments_on_user_id"
   end
@@ -118,6 +131,13 @@ ActiveRecord::Schema.define(version: 20170721104315) do
     t.index ["destination_id"], name: "index_replies_on_destination_id"
     t.index ["micropost_id", "destination_id"], name: "index_replies_on_micropost_id_and_destination_id", unique: true
     t.index ["micropost_id"], name: "index_replies_on_micropost_id"
+  end
+
+  create_table "tags", force: :cascade do |t|
+    t.string   "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["name"], name: "index_tags_on_name", unique: true
   end
 
   create_table "users", force: :cascade do |t|

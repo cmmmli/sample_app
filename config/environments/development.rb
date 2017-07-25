@@ -61,5 +61,8 @@ Rails.application.configure do
   Bullet.bullet_logger = true
   Bullet.console = true
   Bullet.rails_logger = true
+
+  # white list
+  Bullet.add_whitelist type: :n_plus_one_query, class_name: 'Notification', association: :notificationable
   end
 end

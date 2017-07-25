@@ -1,4 +1,7 @@
 <li>
   <%= link_to "#{book.title}", book %><br>
-  <%= book.content %>
+  <%= book.content %><br>
+  <% book.tags.each do |tag| %>
+     <%= tag.name %>
+  <% end %>
 </li>

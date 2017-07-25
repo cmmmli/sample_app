@@ -10,6 +10,15 @@
          | <%= link_to "edit", edit_book_path(@book) %><br>
       <% end %>
       <%= @book.content %>
+      <% if @tags.any? %>
+        <h4>Tags</h4>
+        <% @tags.each do |tag| %>
+          <%= link_to "#{tag.name}", tag_path(tag) %>
+          <%= "/" %>
+        <% end %>
+        <br>
+        <%= link_to "Manage tags", tag_manager_book_path(@book) %>
+      <% end %>
       <% if @users.any? %>
         <h4>Reading users</h4>
         <ul class="users">
@@ -29,8 +38,10 @@
     <%= render 'registration_form' if logged_in? %>
     <ol class="chapters">
       <h3>Chapters</h3>
-      <h3>You are reading <%= "#{@book_user.read_status.to_i}%" %></h3>
-      <%= render @chapters %>
+      <% if @book_user %>
+        <h3>You are reading <%= "#{@book_user.read_status.to_i}%" %></h3>
+        <%= render @chapters %>
+      <% end %>
     </ol>
   </div>
 </div>

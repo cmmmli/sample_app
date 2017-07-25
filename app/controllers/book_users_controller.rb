@@ -8,7 +8,6 @@ class BookUsersController < ApplicationController
     current_user.register_book_as_normal_user(@book)
     respond_to do |format|
       format.html {redirect_to @book}
-      format.js
     end
   end
 
@@ -17,7 +16,6 @@ class BookUsersController < ApplicationController
     current_user.delete_book_registration(@book)
     respond_to do |format|
       format.html {redirect_to @book}
-      format.js
     end
   end
 

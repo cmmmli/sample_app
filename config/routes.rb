@@ -28,7 +28,13 @@ Rails.application.routes.draw do
   resources :group_users, only: [:create, :destroy]
   resources :books do
     resources :reading_progresses, only: [:create, :destroy], module: "books"
+    get :tag_manager, on: :member
   end
   resources :book_users, only: [:create, :destroy]
-  resources :reading_progresses, only: :update
+  patch :book_tags, to: 'book_tags#manager'
+  resources :tags, only: [:index, :show, :create, :destroy]
+
+  namespace :api, {format: 'json'} do
+    resources :tags, only: [:index, :create]
+  end
 end

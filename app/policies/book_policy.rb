@@ -29,8 +29,8 @@ class BookPolicy < ApplicationPolicy
     user.admin? || record.book_users.find_by(user_id: user.id).role == 1
   end
 
-  def register?
-    user.book_is_registered?(record)
+  def tag_manager?
+    true
   end
 
 end
